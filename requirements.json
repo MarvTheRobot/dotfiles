@@ -1,0 +1,10 @@
+{
+	"posh-git": {
+			"version": "*",
+			"prerelease": true
+	},
+	"oh-my-posh": {
+			"version": "*",
+			"prerelease": true
+	}
+}

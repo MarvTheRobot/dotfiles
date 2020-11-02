@@ -1,3 +1,5 @@
+$dotfiles = Resolve-Path '~/.dotfiles'
+
 function New-Link {
 	[cmdletbinding()]
 	param (
@@ -26,7 +28,7 @@ function New-Link {
 }
 
 $repo = $PSCommandPath.Replace('install.ps1','')
-$dotfiles = Resolve-Path '~/.dotfiles'
+New-Link -Source $repo -Target $dotfiles
 
 # VsCode Settings
 ## I want a way of sharing some settings between apps and some specific
@@ -44,15 +46,12 @@ if(Get-Command 'code-insiders'){
 
 # Link powershell profile
 New-Link -Source "$dotfiles/pwshrc.ps1" -Target "~/.pwshrc.ps1"
-New-Link -Source "$dotfiles/requirements.psd1" -Target "~/.requirements.psd1"
+New-Link -Source "$dotfiles/requirements.json" -Target "~/.requirements.json"
 
 # Link in .config
+if(-not (Test-Path "~/.config")){New-Item -Path "~/.config" -ItemType Directory}
 Get-ChildItem -Path "$dotfiles/config" | foreach-object {
-	if($_.PSIsContainer){
-		New-Link -Source $_.Fullname -Target "~/.config/" -Verbose
-	}else{
-		New-Link -Source $_.Fullname -Target "~/.config/$($_.Name)" -Verbose
-	}
+	New-Link -Source $_.Fullname -Target "~/.config/$($_.Name)" -Verbose
 }
 
 #Change shell
@@ -65,3 +64,11 @@ if(($env:TERM_PROGRAM -ne 'vscode') -and ($env:SHELL -ne $pwshPath)){
 	#want to use powershell as my default shell ovel zsh
 }
 
+pwsh -c 'Install-Module -Scope CurrentUser -Force -AllowPrerelease -AllowClobber PowerShellGet'
+if(-not (Get-PSResourceRepository -Name 'PsGallery')){
+	Register-PSResourceRepository -PSGallery
+}
+Set-PSResourceRepository -Trusted PsGallery
+
+#This is throwing an error. Works if you install a module directly
+Install-PSResource -RequiredResourceFile ./requirements.json
