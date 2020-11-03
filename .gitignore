@@ -1,9 +1,10 @@
 # GitHub Cli
 ## hosts.yml contains oAuth token
-.config/gh/hosts.yml
+config/gh/hosts.yml
 
 
-
+# Vi. Vim, and whatnot
+config/nvim/plugged
 
 
 # Client OS
