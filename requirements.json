@@ -6,5 +6,9 @@
 	"oh-my-posh": {
 			"version": "*",
 			"prerelease": true
+	},
+	"psdocs": {
+		"version": "*",
+		"prerelease": false
 	}
-}
+}	
