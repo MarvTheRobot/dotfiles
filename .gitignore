@@ -6,6 +6,8 @@ config/gh/hosts.yml
 # Vi. Vim, and whatnot
 config/nvim/plugged
 
+# NuGet
+config/NuGet/nuget.config
 
 # Client OS
 .DS_Store
