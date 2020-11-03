@@ -1,74 +1,120 @@
-$dotfiles = Resolve-Path '~/.dotfiles'
 
 function New-Link {
 	[cmdletbinding()]
 	param (
 		[Parameter(Mandatory=$true)]
-		[ValidateScript({
-			Test-Path $_
-		})]
-		$Source,
+		[ValidateScript({ Test-Path $_ })]
+		[string]$Source,
 
 		[Parameter(Mandatory=$true)]
-		$Target
+		[ValidateNotNullOrEmpty()]
+		[string]$Target
 	)
+	[string]$sourcePath = (Resolve-Path -Path $Source -ErrorAction SilentlyContinue).Path.TrimEnd('/').TrimEnd('\')
+	[string]$targetPath = $Target
 
-	$item = Get-Item -Path $Target -Force -ErrorAction SilentlyContinue
+	$item = (Get-Item -Path $targetPath -Force -ErrorAction SilentlyContinue)
+
+	# Item may already exist on the local machine
+	if(($item.Exists -eq $true) -and ($item.LinkType -ne 'SymbolicLink')){
+		Write-Verbose "$Target already exists. Will backup and replace"
+		$date = Get-Date -f yyyymmdd-hhss
+		$copy = $item.Fullname.Replace($item.BaseName, "$($item.BaseName)-$date")
+		Move-Item -Path $item.Fullname -Destination $copy -ErrorAction Stop
+
+		$item = Get-Item -Path $targetPath -Force -ErrorAction SilentlyContinue
+	}
+	# Item may already exist and be a SymLink
+	If(($item.Exists -eq $true) -and ($item.LinkType -eq 'SymbolicLink')){
+		Write-Verbose "A symbolic link already exists at '$targetPath'"
+		$itemTarget = (Resolve-Path $item.Target).Path
+		
+		# Symlink pointing to another location
+		if($itemTarget -ne $sourcePath){
+			Write-Warning "'$itemTarget' does not point to '$sourcePath'"
+			Write-Warning "Replacing link"
+			$item | Remove-Item -Force
+			$item = Get-Item -Path $Target -Force -ErrorAction SilentlyContinue
+		}
+		else {
+			Write-Information "'$($item.FullName)' already links to '$sourcePath'"
+		}
+	}
+
+	# The item doesn't exist, create it
 	if($item -isnot [object] -or $item.Exists -eq $false){
-		Write-Verbose "Creating symlink for $Source -> $Target"
-		$item = New-Item -Value $source -Path $target -ItemType SymbolicLink
+		Write-Verbose "Creating symlink for $sourcePath -> $targetPath"
+		New-Item -Value $sourcePath -Path $targetPath -ItemType SymbolicLink
 	}
-	elseIf($item.Exists -eq $true -and $item.LinkType -ne 'SymbolicLink'){
-		Write-Error "$Target already exists. Cannot make link"
-	}
-	elseIf($item.Exists -eq $true -and $item.LinkType -eq 'SymbolicLink'){
-		Write-Verbose "$Source already has SymLink in $Target"	
-	}
-
 }
 
-$repo = $PSCommandPath.Replace('install.ps1','')
-New-Link -Source $repo -Target $dotfiles
 
-# VsCode Settings
-## I want a way of sharing some settings between apps and some specific
-if(Get-Command 'code'){
-	$settingsPath = "~/Library/Application Support/Code"
-	New-Link -Source "$dotfiles/settings/vscode/settings.json" -Target "$settingsPath/User/settings.json" 
-	New-Link -Source "$dotfiles/settings/vscode/keybindings.json" -Target "$settingsPath/User/keybindings.json"
-}
-
-if(Get-Command 'code-insiders'){
-	$settingsPath = "~/Library/Application Support/Code - Insiders"
-	New-Link -Source "$dotfiles/settings/vscode/settings-insiders.json" -Target "$settingsPath/User/settings.json"
-	New-Link -Source "$dotfiles/settings/vscode/keybindings.json" -Target "$settingsPath/User/keybindings.json"
-}
-
-# Link powershell profile
-New-Link -Source "$dotfiles/pwshrc.ps1" -Target "~/.pwshrc.ps1"
-New-Link -Source "$dotfiles/requirements.json" -Target "~/.requirements.json"
-
+################################################################################
+#                      Base Configuration Items                                #
+#
 # Link in .config
-if(-not (Test-Path "~/.config")){New-Item -Path "~/.config" -ItemType Directory}
-Get-ChildItem -Path "$dotfiles/config" | foreach-object {
-	New-Link -Source $_.Fullname -Target "~/.config/$($_.Name)" -Verbose
+New-Link -Source "./config" -Target "~/.config" -Verbose
+
+
+
+################################################################################
+#                      Configure Environment                                   #
+################################################################################
+#
+# POWERSHELL profile and install core modules
+
+New-Link -Source "./pwshrc.ps1" -Target "~/.pwshrc.ps1"
+New-Link -Source "./requirements.json" -Target "~/.requirements.json"
+New-Link -Source "./requirements.psd1" -Target "~/.requirements.psd1"
+
+if(-not (Get-PSRepository -Name 'PsGallery')){
+	Register-PSRepository -PSGallery
+}
+if(-not (Get-PSRepository -Name 'PsGallery').IntallationPolicy -eq 'Untrusted'){
+	Set-PSRepository -Name PsGallery -InstallationPolicy Trusted
 }
 
-#Change shell
-## This will need a password; sure there is a way to elevate at the beginNew-ItemTypeemng?
-$pwshPath = (Get-Command -Name 'pwsh').Source
-if(($env:TERM_PROGRAM -ne 'vscode') -and ($env:SHELL -ne $pwshPath)){
-	#chsh -s /usr/local/bin/pwsh
-	#have removed this for a while. ls -a doesn't show symlinks. 
-	#need to look into why as this is annoying and makes me not 
-	#want to use powershell as my default shell ovel zsh
-}
+Install-Module PsDepend -Scope CurrentUser -Force
+Import-Module PsDepend
+Invoke-PsDepend "~/.requirements.psd1" -Force
 
-pwsh -c 'Install-Module -Scope CurrentUser -Force -AllowPrerelease -AllowClobber PowerShellGet'
+
+<# PowerShellGetv3 - Not working, don't know why
+# Install-PSResource: /Users/marv/code/mtr/dotfiles/install.ps1:107:1
+# Line |
+# 107 |  Install-PSResource -RequiredResourceFile ./requirements.json
+#     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#     | Value cannot be null. (Parameter 'value')
+
+
+if(-not (Get-Command Install-PSResource)){
+	pwsh -c 'Install-Module -Scope CurrentUser -Force -AllowPrerelease -AllowClobber PowerShellGet'
+}
 if(-not (Get-PSResourceRepository -Name 'PsGallery')){
 	Register-PSResourceRepository -PSGallery
 }
-Set-PSResourceRepository -Trusted PsGallery
+if(-not (Get-PSResourceRepository -Name 'PsGallery').Trusted -eq 'True'){
+	Set-PSResourceRepository -Trusted PsGallery
+}
 
 #This is throwing an error. Works if you install a module directly
-Install-PSResource -RequiredResourceFile ./requirements.json
+Install-PSResource -RequiredResourceFile (Join-Path $PsScriptRoot requirements.json)
+#>
+
+################################################################################
+#                      Application Settings                                    #
+#
+# Visual Studio Code Settings
+## I want a way of sharing some settings between apps and some specific
+if(Get-Command 'code'){
+	$sp = "~/Library/Application Support/Code"
+	New-Link -Source "./settings/vscode/settings.json" -Target "$sp/User/settings.json" 
+	New-Link -Source "./settings/vscode/keybindings.json" -Target "$sp/User/keybindings.json"
+}
+
+if(Get-Command 'code-insiders'){
+	$sp = "~/Library/Application Support/Code - Insiders"
+	New-Link -Source "./settings/vscode/settings-insiders.json" -Target "$sp/User/settings.json"
+	New-Link -Source "./settings/vscode/keybindings.json" -Target "$sp/User/keybindings.json"
+}
+
