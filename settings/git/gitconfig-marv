@@ -1,0 +1,10 @@
+[user]
+    name = MarvTheRobot
+    email = marv@marvtherobot.com
+		signingKey = 8E7FF19226E451CF938620F50E317E9866CF2D6D
+
+[gpg]
+	program = gpg
+
+[commit]
+	gpgSign = true

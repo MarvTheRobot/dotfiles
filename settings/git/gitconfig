@@ -1,0 +1,30 @@
+[includeIf "gitdir:~/code/soltec/"]
+	path = ~/.gitconfig-soltec
+
+[includeIf "gitdir:~/code/dfe/"]
+	path = ~/.gitconfig-soltec
+
+[includeIf "gitdir:~/code/marv/"]
+	path = ~/.gitconfig-marv
+
+[includeIf "gitdir:~/code/limitedknowledge/"]
+	path = ~/.gitconfig-marv
+
+
+[alias]
+	push-with-lease = push --force-with-lease
+
+[gpg]
+	program = gpg
+
+[commit]
+	gpgSign = true
+
+[push]
+	default = current
+
+[pull]
+	ff = only
+
+[tag]
+	forceSignAnnotated = false
