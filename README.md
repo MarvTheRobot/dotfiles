@@ -6,5 +6,6 @@
 
 Basic set of dotfiles
 
-1. Symlink `~/.config': Rather than micro-manage the content, all changes will 
-  appear in repo and be added or gitignored
+1. `~/.config`: Backup if exists, replace with symlink. 
+1. `~/.pwshrc.ps1`: Symlink to `./pwshrc.ps1`
+1. `.
