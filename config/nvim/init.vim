@@ -75,6 +75,7 @@ if !exists('g:vscode')
 	map <Leader>ws <C-W>s
 	map <Leader>wc <C-W>q
 	map <Leader>wn <C-W>n
+	map <Leader>wm :MaximizerToggle<CR>
 
 	" Open splits on the right and below
 	set splitbelow
