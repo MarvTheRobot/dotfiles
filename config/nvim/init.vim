@@ -1,10 +1,14 @@
-set nu
-set relativenumber
+" Vim not Vi
 set nocompatible
-set tabstop=4 softtabstop=4
-set shiftwidth=4
+
+set autoread
+set history=1000
+set hidden                     "Let buffers exist in background
+
+set number
+set relativenumber
+set backspace=indent,eol,start "Backspace (Insert)
 set colorcolumn=80
-set smartindent
 
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
@@ -16,6 +20,12 @@ if !exists('g:vscode')
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'sheerun/vim-polyglot'
 	Plug 'gruvbox-community/gruvbox'
+
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
+	Plug 'junegunn/fzf.vim'
+	Plug 'ctrlpvim/ctrlp.vim'
+
+	Plug 'szw/vim-maximizer'
 endif
 
 " always load these plugins
@@ -23,15 +33,64 @@ endif
 call plug#end()
 
 if !exists('g:vscode')
-	let g:gruvbox_contrast_dark = 'hard'
+	syntax on
+	
+	" Clear any mappings to space and set leader key
+	nnoremap <SPACE> <Nop>
+	let mapleader="\<Space>"
+	
+	" ================ Turn Off Swap Files ==============
+
+	set noswapfile
+	set nobackup
+	set nowb
+
+	" ================ Persistent Undo ==================
+	" Keep undo history across sessions, by storing in file.
+	" Only works all the time.
+	if has('persistent_undo')
+		silent !mkdir ~/.config/nvim/backups > /dev/null 2>&1
+		set undodir=~/.config/nvim/backups
+		set undofile
+	endif
+
+
+	"=================== Indentation ===================="
+	set tabstop=4 softtabstop=4
+	set shiftwidth=4
+	set smartindent
+	" Auto indent pasted text
+	nnoremap p p=`]<C-o>
+	nnoremap P P=`]<C-o>
+
+	"=================== Splits ===================="
+	" Quick jumping between splits
+	map <C-J> <C-W>j
+	map <C-K> <C-W>k
+	map <C-H> <C-W>h
+	map <C-L> <C-W>l
+
+	" Open new splits easily
+	map <Leader>wv <C-W>v
+	map <Leader>ws <C-W>s
+	map <Leader>wc <C-W>q
+	map <Leader>wn <C-W>n
+
+	" Open splits on the right and below
+	set splitbelow
+	set splitright
+
+	
+"=================== Colour / Theme ==================="
 	if exists('+termguicolors')
 			let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 			let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 	endif
-	let g:gruvbox_invert_selection='0'
 
+	let g:gruvbox_contrast_dark = 'hard'
+	let g:gruvbox_invert_selection ='0'
 
-	let g:coc_global_extensions=[ 'coc-powershell']
+	let g:coc_global_extensions =[ 'coc-powershell']
 
 	" Use <c-space> to trigger completion.
 	if has('nvim')
@@ -58,11 +117,17 @@ if !exists('g:vscode')
 			execute '!' . &keywordprg . " " . expand('<cword>')
 		endif
 	endfunction
-
+	
+	
 	" Symbol renaming.
 	nmap <leader>rn <Plug>(coc-rename)
 
+	" NERDTree
 	map <C-n> :NERDTreeToggle<CR>
+	nnoremap <silent> <Leader>v :NERDTreeFind<CR>
+	let g:NERDTreeWinPos = "right"
+	let NERDTreeMinimalUI = 1
+	let NERDTreeDirArrows = 1
 
 	colorscheme gruvbox
 	set background=dark
