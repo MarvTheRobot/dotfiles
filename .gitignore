@@ -5,6 +5,10 @@ config/gh/hosts.yml
 
 # Vi. Vim, and whatnot
 config/nvim/plugged
+config/nvim/autoload/plug.vim.old
+config/nvim/backups/
+config/nvim/.netrwhist
+config/coc/extensions/
 
 # NuGet
 config/NuGet/nuget.config
