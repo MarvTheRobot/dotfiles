@@ -74,6 +74,35 @@ if(-not (Get-PSRepository -Name 'PsGallery').IntallationPolicy -eq 'Untrusted'){
 	Set-PSRepository -Name PsGallery -InstallationPolicy Trusted
 }
 
+################################################################################
+#                            Fonts????                                         #
+#                                                                              #
+# Hack Nerd Font Mono, fantasqueSansMono Nerd Font, Cascadia Mono Pl, Hack,
+
+# I think I'm going to need to break things out by O/S with some shared config
+
+################################################################################
+#                      Application Settings                                    #
+#
+# Visual Studio Code Settings
+## I want a way of sharing some settings between apps and some specific
+
+if($isMacos){
+	# Linux has these in .config, which is just symlinked anyway
+	# if Windows needs them in a different place, it'll be worth having a path lookup
+	if(Get-Command 'code'){
+		$sp = "~/Library/Application Support/Code/User"
+		New-Link -Source "./config/Code/User/settings.json" -Target "$sp/settings.json" 
+		New-Link -Source "./config/Code/User/keybindings.json" -Target "$sp/keybindings.json"
+	}
+	if(Get-Command 'code-insiders'){
+		$sp = "~/Library/Application Support/Code - Insiders/User"
+		New-Link -Source "./config/Code - Insiders/User/settings.json" -Target "$sp/settings.json"
+		New-Link -Source "./config/Code - Insiders/User/keybindings.json" -Target "$sp/keybindings.json"
+	}
+}
+
+
 Install-Module PsDepend -Scope CurrentUser -Force
 Import-Module PsDepend
 Invoke-PsDepend "~/.requirements.psd1" -Force
@@ -99,22 +128,4 @@ if(-not (Get-PSResourceRepository -Name 'PsGallery').Trusted -eq 'True'){
 
 #This is throwing an error. Works if you install a module directly
 Install-PSResource -RequiredResourceFile (Join-Path $PsScriptRoot requirements.json)
-#>
-
-################################################################################
-#                      Application Settings                                    #
-#
-# Visual Studio Code Settings
-## I want a way of sharing some settings between apps and some specific
-if(Get-Command 'code'){
-	$sp = "~/Library/Application Support/Code"
-	New-Link -Source "./settings/vscode/settings.json" -Target "$sp/User/settings.json" 
-	New-Link -Source "./settings/vscode/keybindings.json" -Target "$sp/User/keybindings.json"
-}
-
-if(Get-Command 'code-insiders'){
-	$sp = "~/Library/Application Support/Code - Insiders"
-	New-Link -Source "./settings/vscode/settings-insiders.json" -Target "$sp/User/settings.json"
-	New-Link -Source "./settings/vscode/keybindings.json" -Target "$sp/User/keybindings.json"
-}
-
+#> 
