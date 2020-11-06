@@ -67,6 +67,7 @@
 	"todo-tree.tree.showScanModeButton": false,
 	"vscode-neovim.textDecorationsAtTop": true,
 	"vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim/",
+	"vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
 	"vsicons.dontShowNewVersionMessage": true,
 	"wiki.basePath": "/Users/marv/marvlog",
 	"wiki.baseRootFile": "index.md",
