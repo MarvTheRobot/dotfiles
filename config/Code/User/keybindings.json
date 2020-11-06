@@ -1,0 +1,8 @@
+[
+  { "key": "alt+shift+l",          "command": "workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus && terminalProcessSupported" },
+  { "key": "alt+shift+h",         "command": "workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus && terminalProcessSupported" },
+  { "key": "cmd+enter",         "command": "editor.action.openLink",
+    "when": "editorFocus" }
+]
