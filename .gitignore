@@ -10,9 +10,23 @@ config/nvim/backups/
 config/nvim/.netrwhist
 config/coc/extensions/
 
+# VsCode
+config/Code/
+!config/Code/User/Setting.json
+!config/Code/User/Keybindings.json
+
+# VsCode - Insiders
+config/Code - Insiders/
+!config/Code - Insiders/User/Setting.json
+!config/Code - Insiders/User/Keybindings.json
+
 # NuGet
 config/NuGet/nuget.config
 
 # Client OS
 .DS_Store
+
+# ? 
+
+baloofilerc
 
