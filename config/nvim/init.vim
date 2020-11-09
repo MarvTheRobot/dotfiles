@@ -38,9 +38,14 @@ if !exists('g:vscode')
 	" Clear any mappings to space and set leader key
 	nnoremap <SPACE> <Nop>
 	let mapleader="\<Space>"
+
+	" Remap paste to put the cursor in an expected place
+	noremap p gp
+	noremap P gP
+	noremap gp p
+	noremap gP P
 	
 	" ================ Turn Off Swap Files ==============
-
 	set noswapfile
 	set nobackup
 	set nowb
@@ -60,8 +65,8 @@ if !exists('g:vscode')
 	set shiftwidth=4
 	set smartindent
 	" Auto indent pasted text
-	nnoremap p p=`]<C-o>
-	nnoremap P P=`]<C-o>
+	"nnoremap p p=`]<C-o>
+	"nnoremap P P=`]<C-o>
 
 	"=================== Splits ===================="
 	" Quick jumping between splits

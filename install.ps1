@@ -27,7 +27,7 @@ function New-Link {
 	# Item may already exist and be a SymLink
 	If(($item.Exists -eq $true) -and ($item.LinkType -eq 'SymbolicLink')){
 		Write-Verbose "A symbolic link already exists at '$targetPath'"
-		$itemTarget = (Resolve-Path $item.Target).Path
+		$itemTarget = (Resolve-Path $item.Target -ErrorAction SilentlyContinue).Path
 		
 		# Symlink pointing to another location
 		if($itemTarget -ne $sourcePath){
@@ -116,16 +116,16 @@ Invoke-PsDepend "~/.requirements.psd1" -Force
 #     | Value cannot be null. (Parameter 'value')
 
 
-if(-not (Get-Command Install-PSResource)){
-	pwsh -c 'Install-Module -Scope CurrentUser -Force -AllowPrerelease -AllowClobber PowerShellGet'
-}
-if(-not (Get-PSResourceRepository -Name 'PsGallery')){
-	Register-PSResourceRepository -PSGallery
-}
-if(-not (Get-PSResourceRepository -Name 'PsGallery').Trusted -eq 'True'){
-	Set-PSResourceRepository -Trusted PsGallery
-}
+	if(-not (Get-Command Install-PSResource)){
+		pwsh -c 'Install-Module -Scope CurrentUser -Force -AllowPrerelease -AllowClobber PowerShellGet'
+	}
+	if(-not (Get-PSResourceRepository -Name 'PsGallery')){
+		Register-PSResourceRepository -PSGallery
+	}
+	if(-not (Get-PSResourceRepository -Name 'PsGallery').Trusted -eq 'True'){
+		Set-PSResourceRepository -Trusted PsGallery
+	}
 
 #This is throwing an error. Works if you install a module directly
-Install-PSResource -RequiredResourceFile (Join-Path $PsScriptRoot requirements.json)
+	Install-PSResource -RequiredResourceFile (Join-Path $PsScriptRoot requirements.json)
 #> 

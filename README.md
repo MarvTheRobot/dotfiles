@@ -13,9 +13,13 @@ Basic set of dotfiles
     1. _this is not currently working so we stick with PsDepend_
 1. `PsGallery`: Configure as trusted
 1. `PsDepend`: Install module and invoke against `~/.requirements.psd1`
-
+1. `VsCode`: 
+    1. `Settings.json`: Symlink for MacOS
+	1. `Keybindings.json`: Symlink for MacOS
 
 Still to do
 
 - GPG: Need to install and configure, restore keys from KeyVault
 - KeyVault: Get secrets, will require adding Az (Cli or Module)
+
+
