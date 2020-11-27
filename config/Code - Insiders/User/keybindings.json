@@ -4,5 +4,9 @@
   { "key": "alt+shift+h",         "command": "workbench.action.terminal.focusNextPane",
     "when": "terminalFocus && terminalProcessSupported" },
   { "key": "cmd+enter",         "command": "editor.action.openLink",
+    "when": "editorFocus" },
+  { "key": "ctrl+m",         "command": "workbench.action.toggleMaximizedPanel",
+    "when": "terminalFocus && terminalProcessSupported" },
+  { "key": "ctrl+m",         "command": "workbench.action.maximizeEditor",
     "when": "editorFocus" }
 ]
