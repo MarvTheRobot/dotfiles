@@ -1,0 +1,18 @@
+regolith.look: marvtherobot
+
+! -- Styles - Colors
+#include "/home/marv/.config/regolith/styles/marv/color"
+
+! -- Styles - Fonts
+#include "/home/marv/.config/regolith/styles/marv/typeface"
+
+! -- Styles - Theme
+#include "/home/marv/.config/regolith/styles/marv/theme"
+
+! -- Applications
+! These files map values defined above into specific app settings.
+#include "/home/marv/.config/regolith/styles/marv/st-term"
+#include "/home/marv/.config/regolith/styles/marv/i3-wm"
+#include "/home/marv/.config/regolith/styles/i3xrocks"
+#include "/home/marv/.config/regolith/styles/rofi"
+#include "/home/marv/.config/regolith/styles/gnome"

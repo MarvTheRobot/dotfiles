@@ -1,0 +1,11 @@
+#define gtk_theme           Gruvbox
+#define icon_theme          Moka
+#define rofi_theme          /etc/regolith/styles/gruvbox/rofi.rasi
+#define theme_terminal_scrollbar never
+#define desktop_wallpaper	/home/marv/Pictures/Wallpapers/HalfLife.jpg
+
+#define i3wm_window_border_size         3
+#define i3wm_floatingwindow_border_size 1
+#define i3wm_gaps_inner_size            5
+#define i3wm_gaps_outer_size            5
+#define i3wm_bar_position               bottom
