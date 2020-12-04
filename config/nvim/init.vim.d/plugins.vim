@@ -10,7 +10,9 @@ call plug#begin('~/.config/nvim/plugged')
 
   Plug 'szw/vim-maximizer'
 
-  Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
+  Plug 'preservim/nerdtree' |
+              \ Plug 'Xuyuanp/nerdtree-git-plugin'
+
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
   Plug 'junegunn/fzf.vim'
   Plug 'ctrlpvim/ctrlp.vim'

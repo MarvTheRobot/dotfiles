@@ -3,8 +3,8 @@ set nocompatible
 filetype off
 
 source $HOME/.config/nvim/init.vim.d/general.vim
-source $HOME/.config/nvim/init.vim.d/plugins.vim
 
+source $HOME/.config/nvim/init.vim.d/plugins.vim
 source $HOME/.config/nvim/init.vim.d/coc.vim
 source $HOME/.config/nvim/init.vim.d/nerdtree.vim
 source $HOME/.config/nvim/init.vim.d/ctrlp.vim
