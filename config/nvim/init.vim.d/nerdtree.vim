@@ -9,11 +9,24 @@ autocmd bufenter * if (winnr("$") == 1 &&
 
 " Open by default
 autocmd StdinReadPre * let s:std_in=1
+
 autocmd VimEnter * if argc() == 0 && 
-	\ !exists(“s:std_in”) && 
-	\ | NERDTree | endif
+	\ !exists("s:std_in") | NERDTree | endif
 
 " NERDTree GitStatus
 let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeGitStatusConcealBrackets = 1
 let g:NERDTreeGitStatusShowClean = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+	\ 'Modified'  :'✹',
+	\ 'Staged'    :'✚',
+	\ 'Untracked' :'✭',
+	\ 'Renamed'   :'➜',
+	\ 'Unmerged'  :'═',
+	\ 'Deleted'   :'✖',
+	\ 'Dirty'     :'✗',
+	\ 'Ignored'   :'☒',
+	\ 'Clean'     :'✔︎',
+	\ 'Unknown'   :'?',
+	\ }
