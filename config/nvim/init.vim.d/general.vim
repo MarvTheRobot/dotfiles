@@ -4,11 +4,16 @@ set hidden                     "Let buffers exist in background
 
 set number
 set relativenumber
+set nowrap
+set scrolloff=10
 set backspace=indent,eol,start "Backspace (Insert)
 set colorcolumn=80
 set updatetime=300
 
 highlight ColorColumn ctermbg=0 guibg=lightgrey
+
+set list
+set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,precedes:«,extends:»
 
 " ================ Turn Off Swap Files ==============
 set noswapfile

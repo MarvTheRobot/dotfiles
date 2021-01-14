@@ -6,7 +6,6 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.config/nvim/plugged')  
-  Plug 'gruvbox-community/gruvbox'
 
   Plug 'szw/vim-maximizer'
 
@@ -17,16 +16,24 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'ctrlpvim/ctrlp.vim'
 
+  " telescope requirements...
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'sheerun/vim-polyglot'
-  Plug 'hashivim/vim-terraform'
 
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-  
-  Plug 'pangloss/vim-javascript'    " JavaScript support
-  Plug 'leafgarland/typescript-vim' " TypeScript syntax
+  Plug 'hashivim/vim-terraform'     " Terraform Syntax and LS
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } "Golang
+  Plug 'pangloss/vim-javascript'    " JavaScript 
+  Plug 'leafgarland/typescript-vim' " TypeScript 
   Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
   Plug 'jparise/vim-graphql'        " GraphQL syntax
+  
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'gruvbox-community/gruvbox'
 call plug#end()
 
 

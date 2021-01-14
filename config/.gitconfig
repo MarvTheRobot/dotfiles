@@ -1,0 +1,11 @@
+[user]
+  name = MarvTheRobot
+  email = noone@marvtherobot.com
+[includeIf "gitdir:~/code/marv/"]
+  path = "~/.config/git/marv.gitconfig"
+[includeIf "gitdir:~/code/work/"]
+  path = "~/.config/git/work.gitconfig"
+[pull]
+	ff = only
+[push]
+	default = current

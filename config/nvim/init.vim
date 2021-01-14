@@ -10,6 +10,8 @@ source $HOME/.config/nvim/init.vim.d/nerdtree.vim
 source $HOME/.config/nvim/init.vim.d/ctrlp.vim
 
 source $HOME/.config/nvim/init.vim.d/keyboard.vim
+
+source $HOME/.config/nvim/init.vim.d/airline.vim
 source $HOME/.config/nvim/init.vim.d/theme.vim
 
 set statusline=%{coc#status()}%{get(b:,'coc_current_function','')}

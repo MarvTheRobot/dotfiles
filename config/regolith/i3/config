@@ -506,7 +506,7 @@ bindsym $mod+r mode "Resize Mode"
 ###############################################################################
 
 # Disable titlebar
-set_from_resource $i3-wm.window.border.size i3-wm.window.border.size 2
+set_from_resource $i3-wm.window.border.size i3-wm.window.border.size 1
 set_from_resource $i3-wm.floatingwindow.border.size i3-wm.floatingwindow.border.size 1
 default_border pixel $i3-wm.window.border.size
 default_floating_border pixel $i3-wm.floatingwindow.border.size
@@ -534,7 +534,7 @@ focus_follows_mouse $i3-wm.gaps.focus_follows_mouse
 ###############################################################################
 
 # Create variables from Xresources for i3's look.
-set_from_resource $focused.color.border i3-wm.client.focused.color.border "#00ff36"
+set_from_resource $focused.color.border i3-wm.client.focused.color.border "#002b36"
 set_from_resource $focused.color.background i3-wm.client.focused.color.background "#586e75"
 set_from_resource $focused.color.text i3-wm.client.focused.color.text "#fdf6e3"
 set_from_resource $focused.color.indicator i3-wm.client.focused.color.indicator "#268bd2"
@@ -588,7 +588,7 @@ set_from_resource $i3-wm.bar.workspace.urgent.background.color i3-wm.bar.workspa
 set_from_resource $i3-wm.bar.workspace.urgent.text.color i3-wm.bar.workspace.urgent.text.color "#fdf6e3"
 
 # Sets i3 font for dialogs
-set_from_resource $i3-wm.font i3-wm.font pango:Hack Nerd Font 14
+set_from_resource $i3-wm.font i3-wm.font pango:Source Code Pro Medium 13
 font $i3-wm.font
 
 ###############################################################################
