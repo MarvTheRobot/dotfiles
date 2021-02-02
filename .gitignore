@@ -30,3 +30,15 @@ config/NuGet/nuget.config
 
 baloofilerc
 
+gnome-initial-setup-done
+config/BraveSoftware/
+config/discord/
+config/enchant/
+config/evolution/
+config/gedit/
+config/GitKraken/
+config/gtk-3.0/
+config/gnome-control-center/
+config/ibus/
+config/obs-studio/
+config/pulse/

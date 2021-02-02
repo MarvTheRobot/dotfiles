@@ -9,3 +9,5 @@
 	ff = only
 [push]
 	default = current
+[core]
+	excludesFile = ~/.gitignore

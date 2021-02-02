@@ -24,6 +24,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'sheerun/vim-polyglot'
 
+  Plug 'OmniSharp/omnisharp-vim'
   Plug 'hashivim/vim-terraform'     " Terraform Syntax and LS
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } "Golang
   Plug 'pangloss/vim-javascript'    " JavaScript 
