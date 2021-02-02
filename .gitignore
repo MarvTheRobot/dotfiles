@@ -30,8 +30,14 @@ config/NuGet/nuget.config
 
 baloofilerc
 
+mimeapps.list
+monitors.xml*
+user-dirs.*
 gnome-initial-setup-done
+
 config/BraveSoftware/
+config/configstore/
+config/dconf/
 config/discord/
 config/enchant/
 config/evolution/
