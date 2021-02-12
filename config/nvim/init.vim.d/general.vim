@@ -35,8 +35,6 @@ if has('persistent_undo')
 	set undofile
 endif
 
-
-
 " Open splits on the right and below
 set splitbelow
 set splitright

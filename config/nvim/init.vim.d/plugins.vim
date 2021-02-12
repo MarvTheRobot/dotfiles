@@ -6,37 +6,33 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.config/nvim/plugged')  
-
   Plug 'szw/vim-maximizer'
-
-  Plug 'preservim/nerdtree' |
-              \ Plug 'Xuyuanp/nerdtree-git-plugin'
 
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
   Plug 'junegunn/fzf.vim'
   Plug 'ctrlpvim/ctrlp.vim'
 
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'dense-analysis/ale'
+  Plug 'tpope/vim-fugitive'
+
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } "Golang
+  Plug 'OmniSharp/omnisharp-vim'
+  Plug 'leafgarland/typescript-vim' " TypeScript 
+  Plug 'pangloss/vim-javascript'    " JavaScript 
+  Plug 'jparise/vim-graphql'        " GraphQL syntax
+  Plug 'hashivim/vim-terraform'     " Terraform Syntax and LS
+  
   " telescope requirements...
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
 
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'sheerun/vim-polyglot'
-
-  Plug 'OmniSharp/omnisharp-vim'
-  Plug 'hashivim/vim-terraform'     " Terraform Syntax and LS
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } "Golang
-  Plug 'pangloss/vim-javascript'    " JavaScript 
-  Plug 'leafgarland/typescript-vim' " TypeScript 
-  Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
-  Plug 'jparise/vim-graphql'        " GraphQL syntax
-  
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'gruvbox-community/gruvbox'
 call plug#end()
-
 
 " Install plugins on startup
 autocmd VimEnter *

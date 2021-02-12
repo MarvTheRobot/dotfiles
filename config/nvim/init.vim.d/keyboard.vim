@@ -3,16 +3,30 @@ nnoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
 " Remap paste to put the cursor in an expected place
-noremap p gp
-noremap P gP
-noremap gp p
-noremap gP P
+noremap P "0gP
+
+nnoremap <silent> <Leader>y "+y
+vnoremap <silent> <Leader>y "+y
+nnoremap <silent> <Leader>p "+gP
+vnoremap <silent> <Leader>p "+gP
+nnoremap <silent> <Leader>P "+gp
+vnoremap <silent> <Leader>P "+gp
 
 " Keep selection after indent
 " don't use gvV as that doesn't work if you use V in 
 " the first place
 vnoremap < <gv
 vnoremap > >gv
+
+"=================== File Browsing ============="
+nnoremap <leader>b :Lexplore %:p:h<CR>
+nnoremap <C-B> :Lexplore<CR>
+
+" ================= Telescope ================="
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 "=================== Splits ===================="
 " Quick jumping between splits
@@ -44,6 +58,3 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" ================= NERDTree =================="
-map <C-l> :NERDTreeToggle<CR>
-nnoremap <silent> <Leader>v :NERDTreeFind<CR>
