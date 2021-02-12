@@ -1,5 +1,7 @@
+[core]
+  editor = nvim
 [user]
-  name = MarvTheRobot
+  name  = MarvTheRobot
   email = noone@marvtherobot.com
 [includeIf "gitdir:~/code/marv/"]
   path = "~/.config/git/marv.gitconfig"
@@ -11,3 +13,6 @@
 	default = current
 [core]
 	excludesFile = ~/.gitignore
+[alias]
+	pr = "!f() { exec az repos pr \"$@\"; }; f"
+	repo = "!f() { exec az repos \"$@\"; }; f"
