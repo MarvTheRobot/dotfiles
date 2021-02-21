@@ -19,8 +19,8 @@ vnoremap < <gv
 vnoremap > >gv
 
 "=================== File Browsing ============="
-nnoremap <leader>b :Lexplore %:p:h<CR>
-nnoremap <C-B> :Lexplore<CR>
+nnoremap <leader>b :Lexplore! %:p:h<CR>
+nnoremap <C-B> :Lexplore!<CR>
 
 " ================= Telescope ================="
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
