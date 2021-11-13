@@ -1,3 +1,7 @@
+set nocompatible
+filetype plugin on
+syntax on
+
 set autoread
 set history=1000
 set hidden                     "Let buffers exist in background
@@ -8,7 +12,7 @@ set nowrap
 set scrolloff=10
 set backspace=indent,eol,start "Backspace (Insert)
 set colorcolumn=80
-set updatetime=300
+set updatetime=500
 
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
