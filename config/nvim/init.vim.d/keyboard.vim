@@ -2,16 +2,13 @@
 nnoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
-" Remap paste to put the cursor in an expected place
-noremap P "0gP
-
 nnoremap <silent> <Leader>y "+y
 vnoremap <silent> <Leader>y "+y
 nnoremap <silent> <Leader>p "+gP
 vnoremap <silent> <Leader>p "+gP
 nnoremap <silent> <Leader>P "+gp
 vnoremap <silent> <Leader>P "+gp
-
+vnoremap p "_dP
 " Keep selection after indent
 " don't use gvV as that doesn't work if you use V in 
 " the first place
@@ -19,42 +16,30 @@ vnoremap < <gv
 vnoremap > >gv
 
 "=================== File Browsing ============="
-nnoremap <leader>b :Lexplore! %:p:h<CR>
-nnoremap <C-B> :Lexplore!<CR>
+nnoremap <C-f> :Lexplore!<CR>
 
 " ================= Telescope ================="
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>te <cmd>Telescope buffers<cr>
+nnoremap <leader>tc <cmd>Telescope find_commits<cr>
+nnoremap <leader>tb <cmd>Telescope file_browser<cr>
+nnoremap <leader>tf <cmd>Telescope find_files<cr>
+nnoremap <leader>tg <cmd>Telescope live_grep<cr>
+nnoremap <leader>th <cmd>Telescope help_tags<cr>
+nnoremap <leader>ca <cmd>Telescope lsp_code_actions<CR>
+nnoremap <leader>gd <cmd>Telescope lsp_definitions<CR>
+nnoremap <leader>gr <cmd>Telescope lsp_references<CR>
+nnoremap <leader>gi <cmd>Telescope lsp_implementations<CR>
+" Stuffs I can't find a Telescope version of
+nnoremap <silent> <leader>gD <cmd>lua vim.lsp.buf.declaration()<CR>
 
-"=================== Splits ===================="
-" Quick jumping between splits
-map <C-J> <C-W>j
-map <C-K> <C-W>k
-map <C-H> <C-W>h
-map <C-L> <C-W>l
+" Other stuffs
+nnoremap <silent> <leader>fd <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <leader>k <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 
-" Open new splits easily
+" Window Management
 map <Leader>wv <C-W>v
 map <Leader>ws <C-W>s
 map <Leader>wc <C-W>q
 map <Leader>wn <C-W>n
 map <Leader>wm :MaximizerToggle<CR>
-
-" ================= CoC ======================="
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" CoC Code (Action, Fix)
-nmap <leader>ca <Plug>(coc-codeaction)
-nmap <leader>cf <Plug>(coc-fix-current)
-" Symbol renaming.
-nmap <leader>cr <Plug>(coc-rename)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
