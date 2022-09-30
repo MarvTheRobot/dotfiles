@@ -5,10 +5,12 @@ config/gh/hosts.yml
 
 # Vi. Vim, and whatnot
 config/nvim/plugged
+config/nvim/plugin
 config/nvim/autoload/plug.vim.old
 config/nvim/backups/
 config/nvim/.netrwhist
 config/coc/extensions/
+packer_compiled.lua
 
 # VsCode
 config/Code/
