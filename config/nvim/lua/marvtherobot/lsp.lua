@@ -1,12 +1,13 @@
--- LSP settings.
+local lspconfig = require('lspconfig')
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+--- Make runtime files discoverable to the server
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
+
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
-  -- In this case, we create a function that lets us more easily define mappings specific
-  -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -42,83 +43,75 @@ local on_attach = function(_, bufnr)
     { desc = 'Format current buffer with LSP' })
 end
 
--- nvim-cmp supports additional completion capabilities
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local setup_servers = function(server,config)
+  if not config then
+    return
+  end
 
--- Enable the following language servers
-local servers = { 'bicep', 'powershell_es', 'gopls', 'dockerls', 'clangd', 'omnisharp', 'sumneko_lua', 'yamlls', 'jsonls' }
+  -- handle the servers with no config, only 'true'
+  if type(config) ~= 'table' then
+    config = {}
+  end
 
--- Ensure the servers above are installed
-require('nvim-lsp-installer').setup {
-  ensure_installed = servers,
-}
+  config = vim.tbl_deep_extend("force", {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }, config)
 
--- Example custom configuration for lua
---
--- Make runtime files discoverable to the server
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, 'lua/?.lua')
-table.insert(runtime_path, 'lua/?/init.lua')
+  lspconfig[server].setup(config)
+end
 
-local lsp_settings = {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
-
-for _, lsp in ipairs(servers) do
-  local settings = {}
-
-  if lsp == 'gopls' then
-    local gopls = {
+local grammars = { 'jsonc', 'markdown', 'gomod', 'sql' }
+local servers = {
+  powershell_es = true,
+  bicep = true,
+  dockerls = true,
+  omnisharp = true,
+  jsonls = true,
+  yamlls = true,
+  gopls = {
+    settings = {
       analyses = {
         unusedaprams = true,
         shadow = true,
       },
       staticcheck = true,
-    }
-    settings['gopls'] = gopls
-  end
-
-  if lsp == 'sumneko_lua' then
-    local lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        globals = { 'vim' },
-      },
-      workspace = { library = vim.api.nvim_get_runtime_file('', true) },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = { enable = false, },
-    }
-    settings['Lua'] = lua
-  end
-
-  lsp_settings[settings] = settings
-  require('lspconfig')[lsp].setup(lsp_settings)
-end
-
-
-require('lspconfig').sumneko_lua.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        globals = { 'vim' },
-      },
-      workspace = { library = vim.api.nvim_get_runtime_file('', true) },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = { enable = false, },
     },
   },
+  sumneko_lua = {
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          -- Setup your lua path
+          path = runtime_path,
+        },
+        completion = { callSnippet = "Both" },
+        diagnostics = {
+          globals = {'vim'},
+        },
+        workspace = {
+          library = vim.api.nvim_get_runtime_file("", true),
+          maxPreload = 2000,
+          preloadFileSize = 50000
+        },
+        telemetry = { enable = false }
+      }
+    }
+  }
 }
+
+-- Ensure the servers above are installed
+require('nvim-lsp-installer').setup {
+  ensure_installed = servers
+}
+
+-- Treesitter should already install grammars for each of the 'servers' above
+require('nvim-treesitter.configs').setup {
+  ensure_installed = grammars
+}
+
+for server,config in pairs(servers) do
+  setup_servers(server, config)
+end
