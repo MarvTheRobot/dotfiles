@@ -46,7 +46,7 @@ end
 local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePost', {
   command = 'source $MYVIMRC | PackerCompile',
-  pattern = vim.fn.expand '$MYVIMRC',
+  pattern = vim.fn.expand '~/.config/nvim/marvtherobot/**/*.lua',
   group = packer_group,
 })
 
