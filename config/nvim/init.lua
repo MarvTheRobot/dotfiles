@@ -141,7 +141,8 @@ vim.g.maplocalleader = ' '
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
+vim.keymap.set({ 'n', 'v' }, '<leader>p', '"_dP', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>d', '_d', { silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -335,6 +336,13 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  vim.api.nvim_create_autocmd('BufWritePost', {
+    pattern = { "*.tf", "*.tfvars" },
+    callback = function ()
+      vim.lsp.buf.format()
+    end
+  })
 end
 
 -- Enable the following language servers
