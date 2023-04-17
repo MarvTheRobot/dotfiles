@@ -8,6 +8,11 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 require('packer').startup(function(use)
+  -- tumx integration
+  use({
+    "aserowy/tmux.nvim",
+    config = function() return require("tmux").setup() end
+  })
   -- Package manager
   use 'wbthomason/packer.nvim'
 
@@ -48,18 +53,27 @@ require('packer').startup(function(use)
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use 'navarasu/onedark.nvim' -- Theme inspired by Atom
-  use 'nvim-lualine/lualine.nvim' -- Fancier statusline
+  use 'navarasu/onedark.nvim'              -- Theme inspired by Atom
+  use 'sainnhe/gruvbox-material'           -- Gruvbox baby
+  use 'nvim-lualine/lualine.nvim'          -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
+  use 'numToStr/Comment.nvim'              -- "gc" to comment visual regions/lines
+  use 'tpope/vim-sleuth'                   -- Detect tabstop and shiftwidth automatically
 
   -- Fuzzy Finder (files, lsp, etc)
+  use { "nvim-telescope/telescope-file-browser.nvim",
+    requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+  }
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 
+  -- Transparency
+  use { 'xiyaowong/transparent.nvim' }
+
+  -- Terraform
+  use { 'aquasecurity/vim-tfsec' }
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
@@ -116,7 +130,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Set indentation
-vim.o.tabstop = 4
+vim.o.tabstop = 2
 vim.o.smarttab = 2
 vim.o.expandtab = false
 
@@ -126,7 +140,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd [[colorscheme onedark]]
+vim.cmd [[colorscheme gruvbox-material]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -143,6 +157,33 @@ vim.g.maplocalleader = ' '
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>p', '"_dP', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '_d', { silent = true })
+
+-- Window navigation
+vim.keymap.set({ 'n', 'v' }, '<C-j>', '<C-w>j', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<C-k>', '<C-w>k', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<C-h>', '<C-w>h', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<C-l>', '<C-w>l', { silent = true })
+vim.keymap.set({ 't' }, '<C-j>', '<cmd>wincmd j<CR>', { silent = true })
+vim.keymap.set({ 't' }, '<C-k>', '<cmd>wincmd k<CR>', { silent = true })
+vim.keymap.set({ 't' }, '<C-h>', '<cmd>wincmd h<CR>', { silent = true })
+vim.keymap.set({ 't' }, '<C-l>', '<cmd>wincmd l<CR>', { silent = true })
+
+-- Window sizing
+vim.keymap.set({ 'v' }, '>', '>gv', { silent = true })
+vim.keymap.set({ 'v' }, '<', '<gv', { silent = true })
+vim.keymap.set({ 'n' }, '<A-j>', ":resize +2<CR>", { silent = true })
+vim.keymap.set({ 'n' }, '<A-k>', ":resize -2<CR>", { silent = true })
+vim.keymap.set({ 'n' }, '<A-h>', ":vertical resize -2<CR>", { silent = true })
+vim.keymap.set({ 'n' }, '<A-l>', ":vertical resize +2<CR>", { silent = true })
+vim.keymap.set({ 't' }, '<A-j>', "<cmd>resize +2<CR>", { silent = true })
+vim.keymap.set({ 't' }, '<A-k>', "<cmd>resize -2<CR>", { silent = true })
+vim.keymap.set({ 't' }, '<A-h>', "<cmd>vertical resize -2<CR>", { silent = true })
+vim.keymap.set({ 't' }, '<A-l>', "<cmd>vertical resize +2<CR>", { silent = true })
+
+-- Moving text
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -163,7 +204,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 require('lualine').setup {
   options = {
     icons_enabled = false,
-    theme = 'onedark',
+    theme = 'gruvbox-material',
     component_separators = '|',
     section_separators = '',
   },
@@ -203,7 +244,8 @@ require('telescope').setup {
     },
   },
 }
-
+-- Enable telescope file browser
+require("telescope").load_extension "file_browser"
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
@@ -219,6 +261,9 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = '[F]ind [F]iles' })
+vim.keymap.set("n", "<leader>fa", "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>",
+  { desc = '[F]ind [A]all Files' })
+vim.keymap.set("n", "<leader>fe", "<cmd> Telescope file_browser <CR>", { desc = '[F]ile [E]xplorer' })
 vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, { desc = '[F]ind [H]elp' })
 vim.keymap.set('n', '<leader>fw', require('telescope.builtin').grep_string, { desc = '[F]ind current [W]ord' })
 vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, { desc = '[F]ind by [G]rep' })
@@ -228,7 +273,7 @@ vim.keymap.set('n', '<leader>fd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'help', 'vim', 'ruby'},
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'help', 'vim', 'ruby', 'terraform' },
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -322,7 +367,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<leader>k', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -357,12 +402,21 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
 
-  sumneko_lua = {
+  lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
     },
   },
+  terraformls = {
+    --filetypes = { "terraform", "hcl" },
+  },
+  tflint = {},
+  powershell_es = {
+    powershell = { codeFormatting = { Preset = 'Stroustrup' } }
+  },
+  jsonls = {},
+  bicep = {},
 }
 
 -- Setup neovim lua configuration
@@ -438,5 +492,6 @@ cmp.setup {
   },
 }
 
+-- why you no work??? vim.opt.iskeyword:append({'_'})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
