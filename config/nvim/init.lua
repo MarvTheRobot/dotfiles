@@ -47,18 +47,19 @@ require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter-textobjects',
     after = 'nvim-treesitter',
   }
+  use 'nvim-treesitter/nvim-treesitter-context'
 
   -- Git related plugins
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use 'navarasu/onedark.nvim'              -- Theme inspired by Atom
-  use 'sainnhe/gruvbox-material'           -- Gruvbox baby
-  use 'nvim-lualine/lualine.nvim'          -- Fancier statusline
+  use 'navarasu/onedark.nvim'               -- Theme inspired by Atom
+  use 'sainnhe/gruvbox-material'            -- Gruvbox baby
+  use 'nvim-lualine/lualine.nvim'           -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim'              -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth'                   -- Detect tabstop and shiftwidth automatically
+  use 'numToStr/Comment.nvim'               -- "gc" to comment visual regions/lines
+  use 'tpope/vim-sleuth'                    -- Detect tabstop and shiftwidth automatically
 
   -- Fuzzy Finder (files, lsp, etc)
   use { "nvim-telescope/telescope-file-browser.nvim",
@@ -115,6 +116,9 @@ vim.o.hlsearch = false
 -- Make line numbers default
 vim.wo.number = true
 vim.wo.relativenumber = true
+
+-- Set scrolloff
+vim.o.scrolloff = 999
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -332,6 +336,20 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
+require 'treesitter-context'.setup {
+  enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+  max_lines = 0,            -- How many lines the window should span. Values <= 0 mean no limit.
+  min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  line_numbers = true,
+  multiline_threshold = 20, -- Maximum number of lines to collapse for a single context line
+  trim_scope = 'outer',     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+  mode = 'cursor',          -- Line used to calculate context. Choices: 'cursor', 'topline'
+  -- Separator between context and content. Should be a single character string, like '-'.
+  -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+  separator = nil,
+  zindex = 20, -- The Z-index of the context window
+}
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
@@ -384,7 +402,7 @@ local on_attach = function(_, bufnr)
 
   vim.api.nvim_create_autocmd('BufWritePost', {
     pattern = { "*.tf", "*.tfvars" },
-    callback = function ()
+    callback = function()
       vim.lsp.buf.format()
     end
   })
