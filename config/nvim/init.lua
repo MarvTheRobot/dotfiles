@@ -24,7 +24,7 @@ require('packer').startup(function(use)
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
-      'j-hui/fidget.nvim',
+      -- 'j-hui/fidget.nvim',
 
       -- Additional lua configuration, makes nvim stuff amazing
       'folke/neodev.nvim',
@@ -118,7 +118,7 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 
 -- Set scrolloff
-vim.o.scrolloff = 999
+vim.o.scrolloff = 8
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -160,6 +160,8 @@ vim.g.maplocalleader = ' '
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>p', '"_dP', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>P', '"+P', { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '_d', { silent = true })
 
 -- Window navigation
@@ -428,6 +430,7 @@ local servers = {
   },
   terraformls = {
     --filetypes = { "terraform", "hcl" },
+    terraform = { experimentalFeatures = { prefillRequiredFields = true }}
   },
   tflint = {},
   powershell_es = {
@@ -465,7 +468,7 @@ mason_lspconfig.setup_handlers {
 }
 
 -- Turn on lsp status information
-require('fidget').setup()
+-- require('fidget').setup()
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
