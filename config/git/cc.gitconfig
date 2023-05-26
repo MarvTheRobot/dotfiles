@@ -1,0 +1,42 @@
+[credential]
+	credentialStore = gpg
+	helper = manager-core
+	helper = 
+	helper = /home/marv/.dotnet/tools/git-credential-manager
+[user]
+	name = Edd Douse
+	email = edd.douse@contentandcloud.com
+[push]
+	default = current
+[pull]
+	ff = only
+	rebase = true
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[core]
+	editor = nvim
+[rebase]
+	autosquash = true
+[rerere]
+	enabled = true
+[fetch]
+	prune = true
+
+[alias]
+	st = !git status
+	br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+	lg = !git log --oneline --graph --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\" --abbrev-commit -30
+	save = !git add -A && git commit -m 'TEMP: save current work'
+	undo = reset HEAD~1 --mixed
+	pushrealgood = !git push --force-with-lease
+
+[mergetool "nvim"]
+	cmd = nvim -f -c "Gvdiffsplit!" "$MERGED"
+[merge]
+        tool = nvim
+[mergetool]
+        prompt = false
+	keepBackup = false
+
+[init]
+	defaultBranch = trunk
