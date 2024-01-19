@@ -1,0 +1,49 @@
+[includeIf "gitdir:~/Code/"]
+  path = ~/.gitconfig.d/marv.gitconfig
+[includeIf "gitdir:~/dotfiles/"]
+  path = ~/.gitconfig.d/marv.gitconfig
+[includeIf "gitdir:~/work/"]
+  path = ~/.gitconfig.d/work.gitconfig
+[push]
+	default = current
+	autoSetupRemote = true
+[pull]
+	ff = only
+	rebase = true
+[core]
+	editor = nvim
+[rebase]
+	autosquash = true
+[rerere]
+	enabled = true
+[fetch]
+	prune = true
+
+[alias]
+	st = !git status
+	br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+	lg = !git log --oneline --graph --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\" --abbrev-commit -30
+	save = !git add -A && git commit -m 'TEMP: save current work'
+	undo = reset HEAD~1 --mixed
+	shit = reset HEAD~1 --mixed
+	pushrealgood = !git push --force-with-lease
+	prg = !git push --force-with-lease
+	fix = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash $REV^' -
+	last = log -1 HEAD --stat
+
+[mergetool "nvim"]
+	cmd = nvim -f -c "Gvdiffsplit!" "$MERGED"
+[merge]
+	tool = nvim
+[mergetool]
+	prompt = false
+	keepBackup = false
+
+[init]
+	defaultBranch = trunk
+	templateDir = /Users/marv/.git-template
+[credential]
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true

@@ -16,9 +16,11 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 
-vim.cmd([[
-  noremap <silent> <c-h> :lua require("tmux").move_left()<cr>
-  noremap <silent> <c-j> :lua require("tmux").move_bottom()<cr>
-  noremap <silent> <c-k> :lua require("tmux").move_top()<cr>
-  noremap <silent> <c-l> :lua require("tmux").move_right()<cr>
-]])
+map("n", "<silent> <c-h>", ':lua require("tmux").move_left()<cr>')
+map("n", "<silent> <c-j>", ':lua require("tmux").move_bottom()<cr>')
+map("n", "<silent> <c-k>", ':lua require("tmux").move_top()<cr>')
+map("n", "<silent> <c-l>", ':lua require("tmux").move_right()<cr>')
+map("v", "J", ":m '>+1<CR>gv=gv")
+map("v", "K", ":m '<-2<CR>gv=gv")
+map({ "n", "v" }, "<leader>y", [["+y]])
+map("x", "<leader>p", [["_dP]])
